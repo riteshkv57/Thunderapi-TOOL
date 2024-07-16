@@ -21,7 +21,7 @@ function updateEndTime(response) {
 const RequestForm = ({ setLoading, body, headers, setResponse }) => {
   const [verb, setVerb] = React.useState("GET");
   const [url, setUrl] = React.useState(
-    "https://jsonplaceholder.typicode.com/posts/1"
+    "https://json-placeholder.mock.beeceptor.com/todos/1"
   );
   const sendRequest = async (e) => {
     e.preventDefault();
