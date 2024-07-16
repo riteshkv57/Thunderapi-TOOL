@@ -43,15 +43,6 @@ const Credit = () => {
       <button onClick={changeTheme} className="btn">
         {theme}
       </button>
-      <span>
-        <a
-          className="underline font-bold"
-          href="https://github.com/elliott-chong/postman-clone"
-          target="_blank"
-        >
-          Elliott Chong
-        </a>
-      </span>
     </p>
   );
 };
