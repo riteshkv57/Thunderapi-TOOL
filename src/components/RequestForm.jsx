@@ -25,25 +25,36 @@ const RequestForm = ({ setLoading, body, headers, setResponse }) => {
   );
   const sendRequest = async (e) => {
     e.preventDefault();
+    
+    // Exit if URL is not provided
     if (url === "") return;
-    body = null;
-    if (["POST", "PUT", "PATCH"].includes(verb.toUpperCase()))
-      try {
-        JSON.parse(body);
-        body = JSON.stringify(JSON.parse(body));
-      } catch (error) {
-        alert("Malformed JSON data");
-        return;
-      }
-    setLoading(true);
-
+    
     let reqHeaders = {};
     for (let h of headers) {
       if (h.key === "") continue;
       reqHeaders[h.key] = h.value;
     }
-    var res;
+  
+    // Process the body for methods that need it
+    if (["POST", "PUT", "PATCH"].includes(verb.toUpperCase()) && body) {
+      try {
+        // Validate and format the JSON body
+        JSON.parse(body);
+        reqHeaders['Content-Type'] = 'application/json';
+        body = JSON.stringify(JSON.parse(body));
+      } catch (error) {
+        alert("Malformed JSON data");
+        return;
+      }
+    } else {
+      body = null; // No body for other request types
+    }
+  
+    setLoading(true);
+  
+    let res;
     try {
+      // Send the request using axios
       res = await axios({
         method: verb.toLowerCase(),
         url,
@@ -51,11 +62,15 @@ const RequestForm = ({ setLoading, body, headers, setResponse }) => {
         data: body,
       });
     } catch (error) {
-      res = error;
+      // Catch any errors and assign to the response
+      res = error.response ? error.response : error;
     }
+  
+    // Update the response and stop loading
     setResponse(res);
     setLoading(false);
   };
+  
 
   return (
     <div>
